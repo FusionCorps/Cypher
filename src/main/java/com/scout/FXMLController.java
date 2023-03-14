@@ -1,10 +1,10 @@
 //TODO (long-term restructuring) EFFICIENCY: how to encapsulate/declare data fields in more efficient way (e.g. maybe hashmap for each field, like [Object:fx_id]?)
-//TODO csv output, merge new data to it
+//TODO tidy up writeToCSV() and outputAll() method
+//TODO put teamNameMap in separate csv (done); figure out how to read from csv when done from jar file
 package com.scout;
 
 import com.scout.ui.AlertBox;
 import com.scout.ui.LimitedTextField;
-import com.scout.ui.TimerText;
 import com.scout.util.CopyImageToClipBoard;
 import com.scout.util.QRFuncs;
 import javafx.event.ActionEvent;
@@ -29,17 +29,21 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class FXMLController {
-    //scene0:begin
-    //scene1:pregame
-    //scene2:auton
-    //scene3:teleop
-    //scene4:endgame
-    //scene5:qualitative notes
-    //scene6:QR CODE
+    /**
+     * scene0:begin
+     * scene1:pregame
+     * scene2:auton
+     * scene3:teleop
+     * scene4:endgame
+     * scene5:qualitative notes
+     * scene6:QR CODE
+     */
 
     private static LinkedHashMap<String, String> info = new LinkedHashMap<>(); //stores user input data
     private static HashMap<String, Integer> toggleMap = new HashMap<>() {{
@@ -3391,7 +3395,7 @@ public class FXMLController {
         put("9313","ROBOhana");
         put("9314","Middleton Highschool Robotics Team");
         put("9315","Coding Comets");
-    }}; //stores team names
+    }}; //stores team names for each team number, convenience on pregame page
 
     private static int sceneIndex = 0;  //used for changing pages
     private static StringBuilder data = new StringBuilder(); //used to build data output string in sendInfo()
@@ -3444,17 +3448,16 @@ public class FXMLController {
     @FXML private ImageView f_imageBox; //QR code image display box
     private static BufferedImage bufferedImage; //QR code image
 
-    //runs at loading of a scene, defaults null values and reloads previously entered data
+    //runs at loading of any scene, defaults null values and reloads previously entered data
     public void initialize() {
         //setting defaults for certain nullable fields
         if (isNextPageClicked) {
             if (sceneIndex == 1) {
                 //handles team name display
-                teamNum.setOnKeyTyped(event -> {
-                    teamNameText.setText("You are scouting: " + teamNameMap.get(teamNum.getText()));
-                    });
+                teamNum.setOnKeyTyped(event -> teamNameText.setText("You are scouting: " + teamNameMap.get(teamNum.getText())));
             }
             if (sceneIndex == 2) {
+                //sets default color for autoPickup picture depending on alliance color chosen on pregame
                 autonColor = info.get("alliance");
                 Image fieldRed = new Image(getClass().getResource("images/GPstart_red.png").toString());
                 Image fieldBlue = new Image(getClass().getResource("images/GPstart_blue.png").toString());
@@ -3467,6 +3470,7 @@ public class FXMLController {
                 else gpAutonPNG.setImage(fieldBlue);
             }
             if (sceneIndex == 3) {
+                //sets defaults for community, neutral, single, and double GP intakes to 0
                 communityPickups.setText("0");
                 neutralPickups.setText("0");
                 singlePickups.setText("0");
@@ -3478,6 +3482,7 @@ public class FXMLController {
 
     //implementations of setPage() for going to next and previous pages
     @FXML private void resetAll(ActionEvent event) throws IOException {
+        //resets all data storing elements
         data = new StringBuilder();
         info = new LinkedHashMap<>();
         toggleMap = new HashMap<>();
@@ -3486,10 +3491,12 @@ public class FXMLController {
         autoCubes.clear();
         teleopCones.clear();
         teleopCubes.clear();
+        // resets UI to scene0
         sceneIndex = 0;
         nextPage(event);
     }
     @FXML private void nextPage(ActionEvent event) throws IOException {
+        //checks if all required fields are filled, then changes page
         if (checkRequiredFields()) {
             collectData();
             sceneIndex++;
@@ -3499,6 +3506,7 @@ public class FXMLController {
         }
     }
     @FXML private void prevPage(ActionEvent event) throws IOException {
+        //collects data from current page and goes to previous page
         collectData();
         if (sceneIndex > 0) sceneIndex--;
         isNextPageClicked = false;
@@ -3509,12 +3517,13 @@ public class FXMLController {
     //changes page to the scene specified by sceneIndex
     static void setPage(Stage stage, int page) throws IOException {
         sceneIndex = page;
-        //if this causes errors, check syntax in all fxml files
+        //if next line causes errors, check syntax in all fxml files
         Parent root = FXMLLoader.load(FXMLController.class.getResource("scenes/scene" + (sceneIndex) + ".fxml"));
         Scene scene = new Scene(root);
-        stage.setTitle("Scouting App Page" + (page));
+        stage.setTitle("6672 Scouting App Page " + (sceneIndex));
         stage.setScene(scene);
 
+        //adjusts viewing screen to full screen, will look best on the particular surface pro display used because AnchorPane layout is used
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         stage.setWidth(size.getWidth()); //2736 px
         stage.setHeight(size.getHeight()); //1824 px
@@ -3543,12 +3552,13 @@ public class FXMLController {
                 teleopCubes.remove(i);
         collectDataArray(teleopCubes, "teleopCubes");
 
-        //specifically ordered (for Kraken parser) output string appended to data StringBuilder
+        //output string appended to data StringBuilder
         for (String keyName : info.keySet())
             data.append(keyName + "=" + info.get(keyName) + "|");
 
         data = data.delete(data.lastIndexOf("|"), data.length());
 
+        //creates QR code and displays it on screen, runs outputAll() to save all data
         bufferedImage = QRFuncs.generateQRCode(data.toString(), "qrcode.png");
         File file = new File("qrcode.png");
         Image img = new Image(file.getAbsolutePath());
@@ -3557,7 +3567,7 @@ public class FXMLController {
         outputAll();
     }
 
-    //sends data to info storage HashMap, needs to be edited with introduction of new data elements
+    //IMPORTANT: ALL collected data elements must be added to the info HashMap in this method, with a SPECIFIC ORDER so that Kraken can correctly parse them
     private void collectData() {
         switch (sceneIndex) {
             case 1 -> {
@@ -3593,7 +3603,6 @@ public class FXMLController {
                 collectDataCheckBox(shuttle, "shuttle");
                 collectDataToggleGroup(teleopBalance, "teleopBalance");
                 collectDataCheckBox(buddyClimb, "buddyClimb");
-//                collectDataTextField(balanceTime, "balanceTime");
             }
             case 5 -> {
                 collectDataRating(driver, "driver");
@@ -3603,7 +3612,7 @@ public class FXMLController {
         }
     }
 
-    //reloads data for a scene, should be called when loading scene
+    //reloads data for a scene, called when loading scene in initialize() method
     private void reloadData() {
         switch (sceneIndex) {
             case 1 -> {
@@ -3631,7 +3640,6 @@ public class FXMLController {
                 reloadDataCheckBox(shuttle, "shuttle");
                 reloadDataToggleGroup(teleopBalance, "teleopBalance");
                 reloadDataCheckBox(buddyClimb, "buddyClimb");
-//                reloadDataTextField(balanceTime, "balanceTime");
             }
             case 5 -> {
                 reloadDataRating(driver, "driver");
@@ -3645,17 +3653,15 @@ public class FXMLController {
         }
     }
 
-    //copies either data text or QR code based on button source that was clicked
+    //copies either data text or QR code based on button source that was clicked, mainly emergency/debug methods
     @FXML private void copyToClipboard(ActionEvent event) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        if (event.getSource().getClass().equals(javafx.scene.control.Button.class))
-            if (((javafx.scene.control.Button) event.getSource()).getText().contains("Text")) {
-                String str = data.toString();
-                clipboard.setContents(new StringSelection(str), null);
-            } else if (((javafx.scene.control.Button) event.getSource()).getText().contains("QR Code")) {
-                CopyImageToClipBoard ci = new CopyImageToClipBoard();
-                ci.copyImage(bufferedImage);
-            }
+        if (event.getSource().getClass().equals(javafx.scene.control.Button.class)) {
+            if (((javafx.scene.control.Button) event.getSource()).getText().contains("Text"))
+                clipboard.setContents(new StringSelection(data.toString()), null);
+             else if (((javafx.scene.control.Button) event.getSource()).getText().contains("QR Code"))
+                new CopyImageToClipBoard().copyImage(bufferedImage);
+        }
     }
 
     //saves output to QR Codes and text files on computer
@@ -3697,6 +3703,7 @@ public class FXMLController {
 
     }
 
+    //helper function for outputAll() method, writes data to CSV file
     private void writeToCSV(String outputCSVPath) throws IOException {
         File file = new File("Scouting\\output.csv");
         FileWriter writer = new FileWriter(file, true);
@@ -3727,7 +3734,7 @@ public class FXMLController {
         reader.close();
         }
 
-    //puts restrictions on certain data fields
+    //puts restrictions on certain LimitedTextFields
     @FXML private void validateInput(KeyEvent keyEvent) {
         LimitedTextField src = (LimitedTextField) keyEvent.getSource();
         if (src.equals(teamNum)) { //team number
@@ -3867,18 +3874,7 @@ public class FXMLController {
         }
     }
 
-//    //timer functions
-//    @FXML private void startTimer(ActionEvent ignoredEvent) {
-//        balanceTime.start();
-//    }
-//    @FXML private void stopTimer(ActionEvent ignoredEvent) {
-//        balanceTime.pause();
-//    }
-//    @FXML private void resetTimer(ActionEvent ignoredEvent) {
-//        balanceTime.reset();
-//    }
-
-    //template incrementer functions
+    //template incrementer functions, used by +/- buttons
     private void increment(LimitedTextField txtfield) {
         txtfield.setText(String.valueOf(Integer.parseInt(txtfield.getText()) + 1));
     }
@@ -3886,7 +3882,7 @@ public class FXMLController {
         if (!txtfield.getText().equals("0")) txtfield.setText(String.valueOf(Integer.parseInt(txtfield.getText()) - 1));
     }
 
-    //general methods for +/- buttons affecting corr. txtfields
+    //general methods for +/- buttons affecting corresponding LimitedTextFields
     @FXML private void incrementT_cmty(ActionEvent ignoredEvent) {
         increment(communityPickups);
     }
@@ -3934,8 +3930,8 @@ public class FXMLController {
         info.put(key, value);
         toggleMap.put(key, index);
     }
-    private void collectDataComboBox(ComboBox comboBox, String key) {
-        info.put(key, comboBox.getValue().toString());
+    private void collectDataComboBox(ComboBox<String> comboBox, String key) {
+        info.put(key, comboBox.getValue());
     }
 
     //used in reloadData() for specific types of data
@@ -3972,7 +3968,7 @@ public class FXMLController {
     private void reloadDataToggleGroup(ToggleGroup toggleGroup, String key) {
         if (toggleMap.get(key) != null) toggleGroup.selectToggle(toggleGroup.getToggles().get(toggleMap.get(key)));
     }
-    private void reloadDataComboBox(ComboBox comboBox, String key) {
+    private void reloadDataComboBox(ComboBox<String> comboBox, String key) {
         comboBox.setValue(info.get(key));
     }
 
