@@ -8,7 +8,7 @@
 
 <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #0570b0;" stylesheets="@../css/scene5.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
 
-   <Text id="quantitative" layoutX="495.0" layoutY="72.0" text="Qualtitative" />
+   <Text id="quantitative" layoutX="495.0" layoutY="72.0" text="Qualitative" />
 
    <Button id="prevPageButton" layoutX="20.0" layoutY="430.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
    <Button id="nextPageButton" layoutX="1140.0" layoutY="430.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />

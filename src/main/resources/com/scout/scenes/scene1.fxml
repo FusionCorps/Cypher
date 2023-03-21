@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.scout.ui.*?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #d0d1e6;" stylesheets="@../css/scene1.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
 
    <Label id="pregame" layoutX="474.0" layoutY="28.0" text="Pregame" />
@@ -56,12 +56,12 @@
    </RadioButton>
    <Button id="flipImageButton" layoutX="956.0" layoutY="72.0" mnemonicParsing="false" onAction="#flipImage" text="Flip Image" />
    <Text id="teamNameText" fx:id="teamNameText" layoutX="31.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are scouting:" wrappingWidth="744.8585796356201" />
-   <Label layoutX="465.0" layoutY="108.0" text="Driver Station">
+   <Label layoutX="559.0" layoutY="164.0" text="Driver Station">
       <font>
          <Font size="24.0" />
       </font>
    </Label>
-   <ComboBox id="driveStation" fx:id="driveStation" layoutX="468.0" layoutY="145.0" prefHeight="33.0" prefWidth="181.0">
+   <ComboBox id="driveStation" fx:id="driveStation" layoutX="573.0" layoutY="200.0" prefHeight="33.0" prefWidth="181.0">
       <items>
          <FXCollections fx:factory="observableArrayList">
             <String fx:value="Red1" />

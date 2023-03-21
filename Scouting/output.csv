@@ -1,4 +1,0 @@
-teamNum,matchNum,alliance,startLocation,preload,mobility,autoPickups,autoCones,autoCubes,autoBalance,communityPickups,neutralPickups,singlePickups,doublePickups,teleopCones,teleopCubes,shuttle,teleopBalance,buddyClimb,balanceTime,everybot,drivetrainType,drivetrain,intake,speed,driver,scoutName,comments
-123,2,R,3,cube,FALSE,[],[],[],dock,0,0,0,0,[],[],FALSE,dock,FALSE,0.0,FALSE,tank,3,3,3,3,asdd,asd
-12,13,R,Red1,3,cone,FALSE,[],[],[],dock,0,0,0,0,[],[],FALSE,dock,FALSE,4,asdasdasdada,rengarjan
-1,2,R,Blue3,2,cone,FALSE,[],[4],[25],engage,0,0,0,0,[22],[11],FALSE,engage,FALSE,3,asd,1e213
