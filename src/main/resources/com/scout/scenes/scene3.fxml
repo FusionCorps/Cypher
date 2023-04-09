@@ -119,29 +119,6 @@
    <Label id="neutralPickups" layoutX="47.0" layoutY="275.0" prefHeight="96.0" prefWidth="229.0" text="Neutral Zone" textAlignment="CENTER" wrapText="true" />
    <Label id="singlePickups" layoutX="607.0" layoutY="181.0" prefHeight="79.0" prefWidth="359.0" text="Single Substation (ground)" textAlignment="CENTER" wrapText="true" />
    <Label id="doublePickups" layoutX="590.0" layoutY="279.0" prefHeight="116.0" prefWidth="377.0" text="Double Substation (shelf)" textAlignment="CENTER" wrapText="true" />
-
-   <Button id="communityMinusButton" layoutX="270.0" layoutY="200.0" mnemonicParsing="false" onAction="#decrementT_cmty" prefHeight="0.0" prefWidth="51.0" text="–" />
-
-   <Button id="communityPlusButton" layoutX="400.0" layoutY="200.0" mnemonicParsing="false" onAction="#incrementT_cmty" prefHeight="45.0" prefWidth="51.0" text="+" />
-
-   <LimitedTextField id="neutralPickupsText" fx:id="neutralPickups" editable="false" layoutX="335.0" layoutY="300.0" maxHeight="45.0" onAction="#validateInput" prefHeight="45.0" prefWidth="55.0" text="0" />
-
-   <LimitedTextField id="singlePickupsText" fx:id="singlePickups" editable="false" layoutX="1045.0" layoutY="200.0" maxHeight="45.0" onAction="#validateInput" prefHeight="45.0" prefWidth="55.0" text="0" />
-
-   <LimitedTextField id="doublePickupsText" fx:id="doublePickups" editable="false" layoutX="1045.0" layoutY="300.0" maxHeight="45.0" onAction="#validateInput" prefHeight="45.0" prefWidth="55.0" text="0" />
-
-   <Button id="neutralMinusButton" layoutX="270.0" layoutY="300.0" mnemonicParsing="false" onAction="#decrementT_neutzone" prefHeight="0.0" prefWidth="51.0" text="–" />
-
-   <Button id="singleMinusButton" layoutX="974.0" layoutY="200.0" mnemonicParsing="false" onAction="#decrementT_singlesub" prefHeight="0.0" prefWidth="51.0" text="–" />
-
-   <Button id="doubleMinusButton" layoutX="974.0" layoutY="300.0" mnemonicParsing="false" onAction="#decrementT_doublesub" prefHeight="0.0" prefWidth="51.0" text="–" />
-
-   <Button id="neutralPlusButton" layoutX="400.0" layoutY="300.0" mnemonicParsing="false" onAction="#incrementT_neutzone" prefHeight="0.0" prefWidth="51.0" text="+" />
-
-   <Button id="doublePlusButton" layoutX="1118.0" layoutY="300.0" mnemonicParsing="false" onAction="#incrementT_doublesub" prefHeight="0.0" prefWidth="51.0" text="+" />
-
-   <Button id="singlePlusButton" layoutX="1118.0" layoutY="200.0" mnemonicParsing="false" onAction="#incrementT_singlesub" prefHeight="0.0" prefWidth="51.0" text="+" />
-   <LimitedTextField id="communityPickupsText" fx:id="communityPickups" editable="false" layoutX="335.0" layoutY="200.0" maxHeight="45.0" onAction="#validateInput" prefHeight="45.0" prefWidth="55.0" text="0" />
    <Label layoutX="13.0" layoutY="555.0" style="-fx-font-weight: bold;" text="MID NODES">
       <font>
          <Font size="24.0" />
@@ -163,4 +140,8 @@
       </font>
    </Label>
    <Label layoutX="600.0" layoutY="378.0" prefHeight="37.0" prefWidth="121.0" text="↑ Driver Stations" wrapText="true" />
+   <PlusMinusBox fx:id="communityPickups" layoutX="315.0" layoutY="197.0" />
+   <PlusMinusBox fx:id="neutralPickups" layoutX="315.0" layoutY="300.0" />
+   <PlusMinusBox fx:id="singlePickups" layoutX="1041.0" layoutY="202.0" />
+   <PlusMinusBox fx:id="doublePickups" layoutX="1041.0" layoutY="323.0" />
 </Pane>

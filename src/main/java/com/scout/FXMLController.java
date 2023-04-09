@@ -1,13 +1,12 @@
-//TODO (long-term restructuring) EFFICIENCY: how to encapsulate/declare data fields in more efficient way (e.g. maybe hashmap for each field, like [Object:fx_id]?)
-//TODO tidy up writeToCSV() and outputAll() method
+//TODO (long-term restructuring) EFFICIENCY/READABILITY/EASIER TO MODIFY (for new games): how to encapsulate/declare data fields in more efficient way (e.g. maybe hashmap for each field, like [Object:fx_id]?)
+
 package com.scout;
 
 import com.scout.ui.AlertBox;
 import com.scout.ui.LimitedTextField;
+import com.scout.ui.PlusMinusBox;
 import com.scout.util.CopyImageToClipBoard;
 import com.scout.util.QRFuncs;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +45,7 @@ public class FXMLController {
 
     private static LinkedHashMap<String, String> info = new LinkedHashMap<>(); //stores user input data
     private static HashMap<String, Integer> toggleMap = new HashMap<>() {{
-        putIfAbsent("alliance", null);
+        putIfAbsent("driveStation", null);
         putIfAbsent("startLocation", null);
         putIfAbsent("preload", null);
         putIfAbsent("autoBalance", null);
@@ -59,14 +58,15 @@ public class FXMLController {
     private static boolean isNextPageClicked = false; //used in initialize() to prevent data from being sent to info HashMap before user clicks next page
     private static String autonColor = "R"; //for changing color in auton pickup grid
     private static boolean PNGflipped = false; //for flipping starting location image
+    private static String prevMatchNum = "1"; //stores current matchNum, increments on reset
 
+    //======================FXML DATA FIELDS======================
     //data for each page, variables are named the same as corresponding fx:ids in fxml files for consistency
 
     //page 1 - pregame
     @FXML private LimitedTextField teamNum; //team number
     @FXML private LimitedTextField matchNum; //match number
-    @FXML private ToggleGroup alliance; //robot alliance
-    @FXML private ComboBox<String> driveStation;
+    @FXML private ToggleGroup driveStation;
     @FXML private ToggleGroup startLocation; //starting location
 
     @FXML private ImageView startLocationPNG; //starting location image
@@ -74,7 +74,9 @@ public class FXMLController {
     //page 2 - auton
     @FXML private ToggleGroup preload; // GP type preload
     @FXML private CheckBox mobility; //mobility
-    private static final ArrayList<Integer> autoPickups = new ArrayList<>(); //GP intaked at community
+    private static final ArrayList<Integer> autoPickups = new ArrayList<>(); //GP intaked during auton
+    private static final ArrayList<Integer> autoFailedPickups = new ArrayList<>(); //GP failed to intake during auton
+
     private static final ArrayList<Integer> autoCones = new ArrayList<>(); //cones placed
     private static final ArrayList<Integer> autoCubes = new ArrayList<>(); //cubes placed
     @FXML private ToggleGroup autoBalance; //auton balance status
@@ -83,10 +85,10 @@ public class FXMLController {
     @FXML private GridPane a_preGrid; //preload GP grid
     @FXML private ImageView gpAutonPNG;
     //page 3 - teleop
-    @FXML private LimitedTextField communityPickups; //community GP intaked
-    @FXML private LimitedTextField neutralPickups; //neutral zone GP intaked
-    @FXML private LimitedTextField singlePickups; //singlesub GP intaked
-    @FXML private LimitedTextField doublePickups; //doublesub GP intaked
+    @FXML private PlusMinusBox communityPickups; //community GP intaked
+    @FXML private PlusMinusBox neutralPickups; //neutral zone GP intaked
+    @FXML private PlusMinusBox singlePickups; //singlesub GP intaked
+    @FXML private PlusMinusBox doublePickups; //doublesub GP intaked
     private static final ArrayList<Integer> teleopCones = new ArrayList<>(); //cones intaked
     private static final ArrayList<Integer> teleopCubes = new ArrayList<>(); //cubes intaked
 
@@ -105,6 +107,7 @@ public class FXMLController {
     @FXML private ImageView f_imageBox; //QR code image display box
     private static BufferedImage bufferedImage; //QR code image
 
+    //=============================METHODS FOR CONTROLLING APP LOGIC=============================
     //runs at loading of any scene, defaults null values and reloads previously entered data
     public void initialize() {
           if (sceneIndex == 1) {
@@ -127,51 +130,58 @@ public class FXMLController {
                   }
               });
 
-              //automatically selects alliance color based on selected drive-station
-              driveStation.setOnAction(event -> {
-                  for (Toggle toggle: alliance.getToggles()) {
-                      if (toggle.getUserData().equals("R") && driveStation.getValue().contains("Red")) alliance.selectToggle(toggle);
-                      else if (toggle.getUserData().equals("B") && driveStation.getValue().contains("B")) alliance.selectToggle(toggle);
-                  }});
+              //displays starting location image according to whether it was previously flipped
+              if (PNGflipped)  startLocationPNG.setImage(new Image(getClass().getResource(
+                      "images/start_locs_flipped.png").toString()));
+              else startLocationPNG.setImage(new Image(getClass().getResource(
+                      "images/start_locs.png").toString()));
           }
         //setting defaults for certain nullable fields
         if (isNextPageClicked) {
+            if (sceneIndex == 1) {
+                if (matchNum.getText().isEmpty()) matchNum.setText(prevMatchNum);
+            }
             if (sceneIndex == 2) {
                 //sets default color for autoPickup picture depending on alliance color chosen on pregame
-                autonColor = info.get("alliance");
+                autonColor = info.get("driveStation").substring(0,1);
                 Image fieldRed = new Image(getClass().getResource("images/GPstart_red.png").toString());
                 Image fieldBlue = new Image(getClass().getResource("images/GPstart_blue.png").toString());
-                if (info.get("alliance").equals("R"))
-                    gpAutonPNG.setImage(fieldRed);
-                else gpAutonPNG.setImage(fieldBlue);
-
                 if (autonColor.equals("R"))
                     gpAutonPNG.setImage(fieldRed);
                 else gpAutonPNG.setImage(fieldBlue);
             }
             if (sceneIndex == 3) {
                 //sets defaults for community, neutral, single, and double GP intakes to 0
-                communityPickups.setText("0");
-                neutralPickups.setText("0");
-                singlePickups.setText("0");
-                doublePickups.setText("0");
+                communityPickups.getValueElement().setText("0");
+                neutralPickups.getValueElement().setText("0");
+                singlePickups.getValueElement().setText("0");
+                doublePickups.getValueElement().setText("0");
             }
         }
         reloadData();
     }
 
+    /**
+     * <p> {@code resetAll} - resets all forms of data storage and goes to first page
+     * <p> {@code nextPage} - goes to next page
+     * <p> {@code prevPage} - goes to previous page
+     * <p> {@code setPage} - general function for setting page number
+     */
     //implementations of setPage() for going to next and previous pages
     @FXML private void resetAll(ActionEvent event) throws IOException {
+        //sets new default match number
+        prevMatchNum = String.valueOf(Integer.parseInt(prevMatchNum) + Integer.parseInt(info.get("matchNum")));
         //resets all data storing elements
         data = new StringBuilder();
         info = new LinkedHashMap<>();
         toggleMap = new HashMap<>();
         autoPickups.clear();
+        autoFailedPickups.clear();
         autoCones.clear();
         autoCubes.clear();
         teleopCones.clear();
         teleopCubes.clear();
-        // resets UI to scene0
+        // resets UI to scene1
         sceneIndex = 0;
         nextPage(event);
     }
@@ -211,6 +221,14 @@ public class FXMLController {
         stage.show();
     }
 
+    /**
+     * <p> {@code sendInfo} - formats and creates QR code for data, calls outputAll
+     * <p> {@code collectData} - saves data entered on a page
+     * <p> {@code reloadData} - reloads data previously entered when reentering a page
+     * <p> {@code validateInput} - checks for certain data fields (types of characters allowed)
+     * <p> {@code checkRequiredFields} - displays alert boxes for unfulfilled required fields
+     */
+
     //sends data to QR code creator and displays it on screen
     @FXML private void sendInfo() throws Exception {
         data = new StringBuilder();
@@ -233,8 +251,12 @@ public class FXMLController {
         collectDataArray(teleopCubes, "teleopCubes");
 
         //output string appended to data StringBuilder
-        for (String keyName : info.keySet())
+        for (String keyName : info.keySet()) {
+            //get embedded alliance value from driveStation
+            if (keyName.equals("driveStation"))
+                data.append("alliance" + "=" + info.get("driveStation").substring(0,1) + "|");
             data.append(keyName + "=" + info.get(keyName) + "|");
+        }
 
         data = data.delete(data.lastIndexOf("|"), data.length());
 
@@ -253,14 +275,14 @@ public class FXMLController {
             case 1 -> {
                 collectDataTextField(teamNum, "teamNum");
                 collectDataTextField(matchNum, "matchNum");
-                collectDataToggleGroup(alliance, "alliance");
-                collectDataComboBox(driveStation, "driveStation");
+                collectDataToggleGroup(driveStation, "driveStation");
                 collectDataToggleGroup(startLocation, "startLocation");
             }
             case 2 -> {
                 collectDataToggleGroup(preload, "preload");
                 collectDataCheckBox(mobility, "mobility");
                 collectDataArray(autoPickups, "autoPickups");
+                collectDataArray(autoFailedPickups, "autoFailedPickups");
                 collectDataArray(autoCones, "autoCones");
                 for (Integer i : autoCones) {
                     if (!teleopCones.contains(i)) teleopCones.add(i);
@@ -272,10 +294,10 @@ public class FXMLController {
                 collectDataToggleGroup(autoBalance, "autoBalance");
             }
             case 3 -> {
-                collectDataTextField(communityPickups, "communityPickups");
-                collectDataTextField(neutralPickups, "neutralPickups");
-                collectDataTextField(singlePickups, "singlePickups");
-                collectDataTextField(doublePickups, "doublePickups");
+                collectDataTextField(communityPickups.getValueElement(), "communityPickups");
+                collectDataTextField(neutralPickups.getValueElement(), "neutralPickups");
+                collectDataTextField(singlePickups.getValueElement(), "singlePickups");
+                collectDataTextField(doublePickups.getValueElement(), "doublePickups");
                 collectDataArray(teleopCones, "teleopCones");
                 collectDataArray(teleopCubes, "teleopCubes");
             }
@@ -298,8 +320,7 @@ public class FXMLController {
             case 1 -> {
                 reloadDataTextField(teamNum, "teamNum");
                 reloadDataTextField(matchNum, "matchNum");
-                reloadDataToggleGroup(alliance, "alliance");
-                reloadDataComboBox(driveStation, "driveStation");
+                reloadDataToggleGroup(driveStation, "driveStation");
                 reloadDataToggleGroup(startLocation, "startLocation");
             }
             case 2 -> {
@@ -310,10 +331,10 @@ public class FXMLController {
                 reloadDataGridFieldPickup(a_preGrid);
             }
             case 3 -> {
-                reloadDataTextField(communityPickups, "communityPickups");
-                reloadDataTextField(neutralPickups, "neutralPickups");
-                reloadDataTextField(singlePickups, "singlePickups");
-                reloadDataTextField(doublePickups, "doublePickups");
+                reloadDataTextField(communityPickups.getValueElement(), "communityPickups");
+                reloadDataTextField(neutralPickups.getValueElement(), "neutralPickups");
+                reloadDataTextField(singlePickups.getValueElement(), "singlePickups");
+                reloadDataTextField(doublePickups.getValueElement(), "doublePickups");
                 reloadDataGridFieldGP(t_grid, teleopCones, teleopCubes);
             }
             case 4 -> {
@@ -333,22 +354,107 @@ public class FXMLController {
         }
     }
 
-    //copies either data text or QR code based on button source that was clicked, mainly emergency/debug methods
-    @FXML private void copyToClipboard(ActionEvent event) {
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        if (event.getSource().getClass().equals(javafx.scene.control.Button.class)) {
-            if (((javafx.scene.control.Button) event.getSource()).getText().contains("Text"))
-                clipboard.setContents(new StringSelection(data.toString()), null);
-             else if (((javafx.scene.control.Button) event.getSource()).getText().contains("QR Code"))
-                new CopyImageToClipBoard().copyImage(bufferedImage);
+    //puts restrictions on certain LimitedTextFields
+    @FXML private void validateInput(KeyEvent keyEvent) {
+        //create src variable to make code more readable which could be either a LimitedTextField or a TextArea, it is the source of the event
+        Object src = keyEvent.getSource();
+
+        if (src instanceof LimitedTextField ltf) {
+            //if src is teamNum, restrict to Integers, and set max length to 4
+            if (ltf.equals(teamNum)) {
+                ltf.setIntegerField();
+                ltf.setMaxLength(4);
+            }
+            //if src is matchNum, restrict to Integers, and set max length to 3
+            if (ltf.equals(matchNum)) {
+                ltf.setIntegerField();
+                ltf.setMaxLength(3);
+            }
+            //if src is scoutName, restrict to letters and spaces, and set max length to 30
+            if (ltf.equals(scoutName)) {
+                ltf.setRestrict("[a-zA-Z ]");
+                ltf.setMaxLength(30);
+            }
+        }
+        else if (src instanceof TextArea ta) {
+            if (ta.equals(comments)) {
+                //set max length to 2471
+                ta.textProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue.length() > 2471) ta.setText(oldValue);
+                });
+                //restrict to all characters but |
+                ta.textProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue.contains("|")) ta.setText(oldValue);
+                });
+            }
         }
     }
 
-    //saves output to QR Codes and text files on computer, copies in Desktop/Scouting and Documents/backupScouting
+    //validation for required fields
+    private boolean checkRequiredFields() {
+        switch (sceneIndex) {
+            case 1 -> {
+                //if teamNum is empty or contains only 0s, or matchNum is empty or contains only 0s, or driveStation or startLocation is not selected, display error message
+                if (teamNum.getText().isEmpty() || teamNum.getText().matches("0+") ||
+                    matchNum.getText().isEmpty() || matchNum.getText().matches("0+") ||
+                    driveStation.getSelectedToggle() == null || startLocation.getSelectedToggle() == null) {
+                    AlertBox.display("", "Before proceeding, please fill out all required fields.\n" +
+                            "Note that the team number and match number cannot contain 0s.");
+                    return false;
+
+                }
+            }
+            case 2 -> {
+                if (preload.getSelectedToggle() == null || autoBalance.getSelectedToggle() == null) {
+                    AlertBox.display("", "Before proceeding, please select one of the GP preloads and balance status buttons.");
+                    return false;
+                }
+            }
+            case 3 -> {
+                if (Integer.parseInt(communityPickups.getValueElement().getText()) > 99) {
+                    AlertBox.display("", "Community Pickups cannot be greater than 99.");
+                    return false;
+                }
+                if (Integer.parseInt(neutralPickups.getValueElement().getText()) > 99) {
+                    AlertBox.display("", "Neutral Zone Pickups cannot be greater than 99.");
+                    return false;
+                }
+                if (Integer.parseInt(singlePickups.getValueElement().getText()) > 99) {
+                    AlertBox.display("", "Single Pickups cannot be greater than 99.");
+                    return false;
+                }
+                if (Integer.parseInt(doublePickups.getValueElement().getText()) > 99) {
+                    AlertBox.display("", "Double Pickups cannot be greater than 99.");
+                }
+
+            }
+            case 4 -> {
+                if (teleopBalance.getSelectedToggle() == null) {
+                    AlertBox.display("", "Before proceeding, please select a balance status button.");
+                    return false;
+                }
+            }
+            case 5 -> {
+                if (scoutName.getText().isBlank()) {
+                    AlertBox.display("", "Before proceeding, please fill out your name. PLEASE INCLUDE COMMENTS!!!");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * <p> {@code outputAll) - central function for outputting and saving data
+     * <p> {@code writeToCSV} - writes data to CSV on computer
+     * <p> {@code copyToClipBoard} - copies data to clipboard, mainly for debugging
+     */
+
+    //saves output to QR Codes and text files on computer, copies in Desktop/Scouting and Documents/backupScouting of active user
     @FXML private void outputAll() {
         //output paths
-        String outputPath = "C:\\Users\\robotics\\Desktop\\Scouting";
-        String backupPath = "C:\\Users\\robotics\\Documents\\backupScouting";
+        String outputPath = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Scouting";
+        String backupPath = "C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\backupScouting";
 
         //m~-#~-name~
         String dataName = "m"  + info.get("matchNum") + "-" + "#" + info.get("teamNum") + "-" + "name" + info.get("scoutName");
@@ -364,20 +470,18 @@ public class FXMLController {
             new File(backupPath + "\\matchData.csv").createNewFile();
 
 
-            //writes text file and qr code in Documents backup directory
+            //writes text file/qr code/CSV in Documents backup directory
             FileWriter backupWriter = new FileWriter(backupPath + "\\texts\\" + dataName + ".txt");
             backupWriter.write(data.toString());
             backupWriter.close();
             ImageIO.write(bufferedImage, "png", new File(backupPath + "\\qrcodes\\" + dataName + ".png")); //backup qrcode
+            writeToCSV(backupPath + "\\matchData.csv");
 
-            //writes text file and qr code to central Scouting directory in Desktop
+            //writes text file/qr code/CSV to central Scouting directory in Desktop
             FileWriter writer = new FileWriter(outputPath + "\\texts\\" + dataName + ".txt");
             writer.write(data.toString());
             writer.close();
             ImageIO.write(bufferedImage, "png", new File(outputPath + "\\qrcodes\\" + dataName + ".png")); //qr code
-
-            //writes CSV to Scouting directory and backup directory
-            writeToCSV(backupPath + "\\matchData.csv");
             writeToCSV(outputPath + "\\matchData.csv");
         }
         catch (Exception e) {
@@ -416,84 +520,37 @@ public class FXMLController {
         reader.close();
         }
 
-    //puts restrictions on certain LimitedTextFields
-    @FXML private void validateInput(KeyEvent keyEvent) {
-        LimitedTextField src = (LimitedTextField) keyEvent.getSource();
-        if (src.equals(teamNum)) { //team number
-            src.setIntegerField();
-            src.setMaxLength(4);
-        } else if (src.equals(matchNum)) { //match number
-            src.setIntegerField();
-            src.setMaxLength(3);
-        } else if (src.equals(scoutName)) { //scouter name
-            src.setRestrict("[A-Za-z ]"); //letters + spaces only
-            src.setMaxLength(30);
+    //copies either data text or QR code based on button source that was clicked, mainly emergency/debug methods
+    @FXML private void copyToClipboard(ActionEvent event) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        if (event.getSource().getClass().equals(javafx.scene.control.Button.class)) {
+            if (((javafx.scene.control.Button) event.getSource()).getText().contains("Text"))
+                clipboard.setContents(new StringSelection(data.toString()), null);
+            else if (((javafx.scene.control.Button) event.getSource()).getText().contains("QR Code"))
+                new CopyImageToClipBoard().copyImage(bufferedImage);
         }
     }
 
-    //validation for required fields
-    private boolean checkRequiredFields() {
-        switch (sceneIndex) {
-            case 1 -> {
-                if (teamNum.getText().isEmpty() || matchNum.getText().isEmpty() || alliance.getSelectedToggle() == null || driveStation.getValue().isBlank() || startLocation.getSelectedToggle() == null) {
-                    AlertBox.display("", "Before proceeding, please fill out ALL FIELDS.");
-                    return false;
-                }
-                if (teamNum.getText().equals("0000") || matchNum.getText().equals("000") || matchNum.getText().equals("00") || matchNum.getText().equals("0")) {
-                    AlertBox.display("", "Please enter a valid team number and match number.");
-                    return false;
-                }
-            }
-            case 2 -> {
-                if (preload.getSelectedToggle() == null || autoBalance.getSelectedToggle() == null) {
-                    AlertBox.display("", "Before proceeding, please select one of the GP preloads and balance status buttons.");
-                    return false;
-                }
-            }
-            case 3 ->  {
-                if (Integer.parseInt(communityPickups.getText()) > 99) {
-                    AlertBox.display("", "Community Pickups cannot be greater than 99.");
-                    return false;
-                }
-                if (Integer.parseInt(neutralPickups.getText()) > 99) {
-                    AlertBox.display("", "Neutral Zone Pickups cannot be greater than 99.");
-                    return false;
-                }
-                if (Integer.parseInt(singlePickups.getText()) > 99) {
-                    AlertBox.display("", "Single Pickups cannot be greater than 99.");
-                    return false;
-                }
-                if (Integer.parseInt(doublePickups.getText()) > 99) {
-                    AlertBox.display("", "Double Pickups cannot be greater than 99.");
-                }
-
-            }
-            case 4 -> {
-                if (teleopBalance.getSelectedToggle() == null) {
-                    AlertBox.display("", "Before proceeding, please select a balance status button.");
-                    return false;
-                }
-            }
-            case 5 -> {
-                if (scoutName.getText().isEmpty()) {
-                    AlertBox.display("", "Before proceeding, please fill out your name and the drivetrain type button. PLEASE INCLUDE COMMENTS!!!");
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
+    /**
+     * manipGPStart - responds to user input on auton Pickups grid
+     * manipCones - responds to user input on hardcoded cone nodes
+     * manipCubes - affects hardcoded cube nodes
+     * manipVar - affects hybrid nodes
+     */
     //grid field/GP pickup field functions
     @FXML private void manipGPStart(ActionEvent event) {
         Button btn = (Button) event.getSource();
-        System.out.println(btn.getUserData().toString());
         if (btn.getStyle().contains("-fx-background-color: white;")) {
             btn.setStyle("-fx-background-color: green; -fx-border-color: black;");
             autoPickups.add(Integer.valueOf(btn.getUserData().toString()));
         } else if (btn.getStyle().contains("-fx-background-color: green;")) {
-            btn.setStyle("-fx-background-color: white; -fx-border-color: black;");
+            btn.setStyle("-fx-background-color: red; -fx-border-color: black;");
             autoPickups.remove(Integer.valueOf(btn.getUserData().toString()));
+            autoFailedPickups.add(Integer.valueOf(btn.getUserData().toString()));
+        }
+        else if (btn.getStyle().contains("-fx-background-color: red;")) {
+            btn.setStyle("-fx-background-color: white; -fx-border-color: black;");
+            autoFailedPickups.remove(Integer.valueOf(btn.getUserData().toString()));
         }
     }
     @FXML private void manipCones(ActionEvent event) {
@@ -556,40 +613,6 @@ public class FXMLController {
         }
     }
 
-    //template incrementer functions, used by +/- buttons
-    private void increment(LimitedTextField txtfield) {
-        txtfield.setText(String.valueOf(Integer.parseInt(txtfield.getText()) + 1));
-    }
-    private void decrement(LimitedTextField txtfield) {
-        if (!txtfield.getText().equals("0")) txtfield.setText(String.valueOf(Integer.parseInt(txtfield.getText()) - 1));
-    }
-
-    //general methods for +/- buttons affecting corresponding LimitedTextFields
-    @FXML private void incrementT_cmty(ActionEvent ignoredEvent) {
-        increment(communityPickups);
-    }
-    @FXML private void decrementT_cmty(ActionEvent ignoredEvent) {
-        decrement(communityPickups);
-    }
-    @FXML private void incrementT_neutzone(ActionEvent ignoredEvent) {
-        increment(neutralPickups);
-    }
-    @FXML private void decrementT_neutzone(ActionEvent ignoredEvent) {
-        decrement(neutralPickups);
-    }
-    @FXML private void incrementT_singlesub(ActionEvent ignoredEvent) {
-        increment(singlePickups);
-    }
-    @FXML private void decrementT_singlesub(ActionEvent ignoredEvent) {
-        decrement(singlePickups);
-    }
-    @FXML private void incrementT_doublesub(ActionEvent ignoredEvent) {
-        increment(doublePickups);
-    }
-    @FXML private void decrementT_doublesub(ActionEvent ignoredEvent) {
-        decrement(doublePickups);
-    }
-
     //used in collectData() for specific types of data
     private void collectDataCheckBox(CheckBox checkBox, String key) {
         info.put(key, String.valueOf(checkBox.isSelected()));
@@ -639,6 +662,8 @@ public class FXMLController {
             Button btn = (Button) grid.getChildren().get(i);
             if (FXMLController.autoPickups.contains(Integer.valueOf(btn.getUserData().toString())))
                 btn.setStyle("-fx-background-color: green; -fx-border-color: black;");
+            if (FXMLController.autoFailedPickups.contains(Integer.valueOf(btn.getUserData().toString())))
+                btn.setStyle("-fx-background-color: red; -fx-border-color: black;");
         }
     }
     private void reloadDataRating(Rating rating, String key) {
@@ -678,11 +703,11 @@ public class FXMLController {
     //flips pregame start location image
     @FXML private void flipImage(ActionEvent ignoredEvent) {
         if (PNGflipped) {
-            PNGflipped = false;
             startLocationPNG.setImage(new Image(getClass().getResource("images/start_locs.png").toString()));
+            PNGflipped = false;
         } else {
             PNGflipped = true;
-            startLocationPNG.setImage(new Image(getClass().getResource("images/start_locs_reversed.png").toString()));
+            startLocationPNG.setImage(new Image(getClass().getResource("images/start_locs_flipped.png").toString()));
         }
     }
 }

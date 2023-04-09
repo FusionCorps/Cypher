@@ -134,3 +134,8 @@
     -fx-font-family: Bahnschrift;
 }
 
+#driveStation {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+

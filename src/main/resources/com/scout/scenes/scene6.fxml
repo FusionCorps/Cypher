@@ -21,5 +21,5 @@
 
    <Text id="reminderBox" fx:id="f_reminderBox" layoutX="59.0" layoutY="52.0" text="You Scouted Team XXXX." wrappingWidth="264.79998779296875" />
 
-   <Text id="outputString" fx:id="f_dataStr" layoutX="117.0" layoutY="710.0" wrappingWidth="1026.1368942260742" />
+   <Text id="outputString" fx:id="f_dataStr" layoutX="33.0" layoutY="725.0" wrappingWidth="886.1369209289551" />
 </Pane>

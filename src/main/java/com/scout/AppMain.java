@@ -4,7 +4,7 @@ package com.scout;
   6672 FusionCorps Scouting App
   Built with JavaFX framework, JDK 19, and IntelliJ IDEA
   @author FusionCorps-Rishabh Rengarajan
-  @version 1.9.1
+  @version 1.11
 
   each page is a separate scene, whose layout is defined in a separate FXML file
 

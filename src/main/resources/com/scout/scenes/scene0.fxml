@@ -6,5 +6,10 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" scaleShape="false" style="-fx-background-color: #f1eef6;" stylesheets="@../css/scene0.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
    <Text id="title" layoutX="152.0" layoutY="113.0" strokeType="OUTSIDE" text="Fusion Corps App" textAlignment="CENTER" />
-   <Button id="beginButton" alignment="CENTER" layoutX="83.0" layoutY="153.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="550.0" prefWidth="1170.0" text="Begin" />
+   <Button id="beginButton" alignment="CENTER" layoutX="117.0" layoutY="158.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="550.0" prefWidth="1170.0" text="Begin" />
+   <Text layoutX="29.0" layoutY="744.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Created By Rishabh Rengarajan, 2023" textAlignment="CENTER" wrappingWidth="189.90151977539062">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Text>
 </Pane>
