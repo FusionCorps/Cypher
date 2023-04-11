@@ -89,6 +89,7 @@ public class FXMLController {
     @FXML private PlusMinusBox neutralPickups; //neutral zone GP intaked
     @FXML private PlusMinusBox singlePickups; //singlesub GP intaked
     @FXML private PlusMinusBox doublePickups; //doublesub GP intaked
+    @FXML private PlusMinusBox superChargeScored; //supercharged pieces scored
     private static final ArrayList<Integer> teleopCones = new ArrayList<>(); //cones intaked
     private static final ArrayList<Integer> teleopCubes = new ArrayList<>(); //cubes intaked
 
@@ -156,6 +157,7 @@ public class FXMLController {
                 neutralPickups.getValueElement().setText("0");
                 singlePickups.getValueElement().setText("0");
                 doublePickups.getValueElement().setText("0");
+                superChargeScored.getValueElement().setText("0");
             }
         }
         reloadData();
@@ -298,6 +300,7 @@ public class FXMLController {
                 collectDataTextField(neutralPickups.getValueElement(), "neutralPickups");
                 collectDataTextField(singlePickups.getValueElement(), "singlePickups");
                 collectDataTextField(doublePickups.getValueElement(), "doublePickups");
+                collectDataTextField(superChargeScored.getValueElement(), "superChargeScored");
                 collectDataArray(teleopCones, "teleopCones");
                 collectDataArray(teleopCubes, "teleopCubes");
             }
@@ -335,6 +338,7 @@ public class FXMLController {
                 reloadDataTextField(neutralPickups.getValueElement(), "neutralPickups");
                 reloadDataTextField(singlePickups.getValueElement(), "singlePickups");
                 reloadDataTextField(doublePickups.getValueElement(), "doublePickups");
+                reloadDataTextField(superChargeScored.getValueElement(), "superChargeScored");
                 reloadDataGridFieldGP(t_grid, teleopCones, teleopCubes);
             }
             case 4 -> {
@@ -425,6 +429,10 @@ public class FXMLController {
                 }
                 if (Integer.parseInt(doublePickups.getValueElement().getText()) > 99) {
                     AlertBox.display("", "Double Pickups cannot be greater than 99.");
+                }
+                if (Integer.parseInt(superChargeScored.getValueElement().getText()) > 99) {
+                    AlertBox.display("", "Super Charge Scored cannot be greater than 99.");
+                    return false;
                 }
 
             }
