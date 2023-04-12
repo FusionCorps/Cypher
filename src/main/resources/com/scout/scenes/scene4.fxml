@@ -4,38 +4,36 @@
 <?import javafx.scene.layout.*?>
 
 <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #3690c0;" stylesheets="@../css/scene4.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
-   <Button id="prevPageButton" layoutX="40.0" layoutY="430.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
-   <Button id="nextPageButton" layoutX="1105.0" layoutY="430.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
+   <Button id="pageButton" layoutX="40.0" layoutY="430.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
+   <Button id="pageButton" layoutX="1105.0" layoutY="430.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
 
    <Label id="endgame" layoutX="505.0" layoutY="14.0" text="Endgame" />
 
    <Label id="chargeStation" layoutX="106.0" layoutY="107.0" text="Charging Station" />
 
-   <CheckBox id="shuttle" fx:id="shuttle" layoutX="650.0" layoutY="107.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="545.0" text="Shuttlebot? (moves game pieces for other robots to score)" wrapText="true" />
+   <CheckBox id="buddyClimb" fx:id="buddyClimb" layoutX="688.0" layoutY="183.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="467.0" text="Buddy Climb? (helped other robot climb)" />
 
-   <CheckBox id="buddyClimb" fx:id="buddyClimb" layoutX="650.0" layoutY="268.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="467.0" text="Buddy Climb? (helped other robot climb)" />
-
-   <RadioButton id="chargeStationEngage" layoutX="60.0" layoutY="170.0" mnemonicParsing="false" text="Engage" userData="engage">
+   <RadioButton id="selectionButton" layoutX="60.0" layoutY="170.0" mnemonicParsing="false" text="Engage" userData="engage">
       <toggleGroup>
          <ToggleGroup fx:id="teleopBalance" />
       </toggleGroup>
    </RadioButton>
-   <RadioButton id="chargeStationDock" layoutX="300.0" layoutY="170.0" mnemonicParsing="false" text="Dock" userData="dock">
+   <RadioButton id="selectionButton" layoutX="300.0" layoutY="170.0" mnemonicParsing="false" text="Dock" userData="dock">
       <toggleGroup>
          <fx:reference source="teleopBalance" />
       </toggleGroup>
    </RadioButton>
-   <RadioButton id="chargeStationFail" layoutX="300.0" layoutY="235.0" mnemonicParsing="false" text="Fail" userData="fail">
+   <RadioButton id="selectionButton" layoutX="300.0" layoutY="235.0" mnemonicParsing="false" text="Fail" userData="fail">
      <toggleGroup>
           <fx:reference source="teleopBalance" />
      </toggleGroup>
    </RadioButton>
-   <RadioButton id="chargeStationPark" layoutX="60.0" layoutY="235.0" mnemonicParsing="false" text="Park" userData="park">
+   <RadioButton id="selectionButton" layoutX="60.0" layoutY="235.0" mnemonicParsing="false" text="Park" userData="park">
         <toggleGroup>
              <fx:reference source="teleopBalance" />
         </toggleGroup>
    </RadioButton>
-   <RadioButton id="chargeStationNA" layoutX="60.0" layoutY="299.0" mnemonicParsing="false" text="N/A" userData="N/A">
+   <RadioButton id="selectionButton" layoutX="60.0" layoutY="299.0" mnemonicParsing="false" text="N/A" userData="N/A">
         <toggleGroup>
              <fx:reference source="teleopBalance" />
         </toggleGroup>

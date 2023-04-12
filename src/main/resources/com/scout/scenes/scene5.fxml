@@ -10,13 +10,13 @@
 
    <Text id="quantitative" layoutX="495.0" layoutY="72.0" text="Qualitative" />
 
-   <Button id="prevPageButton" layoutX="20.0" layoutY="430.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
-   <Button id="nextPageButton" layoutX="1140.0" layoutY="430.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
+   <Button id="pageButton" layoutX="20.0" layoutY="430.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
+   <Button id="pageButton" layoutX="1140.0" layoutY="430.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
 
    <TextArea id="comments" fx:id="comments" layoutX="649.0" layoutY="103.0" prefHeight="286.0" prefWidth="655.0" promptText="Comments (fouls, strategy, anything else notable)" />
 
    <Label id="driverSkill" layoutX="40.0" layoutY="117.0" text="Driver Skill/SPEED" />
    <Rating fx:id="driver" layoutX="422.0" layoutY="119.0" rating="3.0" />
    <LimitedTextField id="scoutNameTextField" fx:id="scoutName" layoutX="317.0" layoutY="201.0" onKeyPressed="#validateInput" prefHeight="37.0" prefWidth="299.0" />
-   <Label id="scoutNameText" layoutX="40.0" layoutY="211.0" text="Scouter Name" />
+   <Label layoutX="40.0" layoutY="211.0" text="Scouter Name" />
 </Pane>

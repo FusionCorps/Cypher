@@ -6,55 +6,53 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #d0d1e6;" stylesheets="@../css/scene1.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
+<Pane id="selectionButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #d0d1e6;" stylesheets="@../css/scene1.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
 
    <Label id="pregame" layoutX="474.0" layoutY="28.0" text="Pregame" />
+   <LimitedTextField id="textField" fx:id="matchNum" layoutX="271.0" layoutY="207.0" onKeyPressed="#validateInput" prefHeight="40.0" prefWidth="170.0" />
+   <LimitedTextField id="textField" fx:id="teamNum" layoutX="251.0" layoutY="99.0" onKeyPressed="#validateInput" prefHeight="40.0" prefWidth="170.0" />
 
-   <Text id="matchNumText" layoutX="60.0" layoutY="242.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Match Num" />
-   <LimitedTextField id="matchNumTextField" fx:id="matchNum" layoutX="271.0" layoutY="207.0" onKeyPressed="#validateInput" prefHeight="40.0" prefWidth="170.0" />
-
-   <Text id="teamNumText" layoutX="60.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Num" />
-   <LimitedTextField id="teamNumTextField" fx:id="teamNum" layoutX="251.0" layoutY="99.0" onKeyPressed="#validateInput" prefHeight="40.0" prefWidth="170.0" />
-
-   <Button id="prevPageButton" layoutX="40.0" layoutY="430.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
-   <Button id="nextPageButton" layoutX="1105.0" layoutY="430.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
+   <Button id="pageButton" layoutX="40.0" layoutY="430.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
+   <Button id="pageButton" layoutX="1105.0" layoutY="430.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
 
    <ImageView fx:id="startLocationPNG" fitHeight="243.0" fitWidth="523.0" layoutX="797.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true">
       <Image url="@../images/start_locs.png" />
    </ImageView>
 
-   <Label id="startLocation" layoutX="56.0" layoutY="277.0" prefHeight="105.0" prefWidth="181.0" text="Starting Location" />
+   <Label id="startLocation" layoutX="56.0" layoutY="286.0" prefHeight="101.0" prefWidth="175.0" text="Starting Location" wrapText="true" />
 
-   <RadioButton id="startLocation1" layoutX="252.0" layoutY="270.0" mnemonicParsing="false" text="1" userData="1">
+   <RadioButton id="selectionButton" layoutX="252.0" layoutY="270.0" mnemonicParsing="false" text="1" userData="1">
       <toggleGroup>
          <ToggleGroup fx:id="startLocation" />
       </toggleGroup>
    </RadioButton>
-   <RadioButton id="startLocation2" layoutX="252.0" layoutY="320.0" mnemonicParsing="false" text="2" userData="2">
+   <RadioButton id="selectionButton" layoutX="252.0" layoutY="320.0" mnemonicParsing="false" text="2" userData="2">
       <toggleGroup>
          <fx:reference source="startLocation" />
       </toggleGroup>
    </RadioButton>
-   <RadioButton id="startLocation3" layoutX="252.0" layoutY="370.0" mnemonicParsing="false" text="3" userData="3">
+   <RadioButton id="selectionButton" layoutX="252.0" layoutY="370.0" mnemonicParsing="false" text="3" userData="3">
       <toggleGroup>
          <fx:reference source="startLocation" />
       </toggleGroup>
    </RadioButton>
-   <Button id="flipImageButton" layoutX="956.0" layoutY="72.0" mnemonicParsing="false" onAction="#flipImage" text="Flip Image" />
+   <Button id="pageButton" layoutX="956.0" layoutY="72.0" mnemonicParsing="false" onAction="#flipImage" text="Flip Image" />
    <Text id="teamNameText" fx:id="teamNameText" layoutX="31.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are scouting:" wrappingWidth="744.8585796356201" />
    <Label layoutX="496.0" layoutY="209.0" text="Driver Station">
       <font>
          <Font size="32.0" />
       </font>
    </Label>
-   <RadioButton id="driveStation" layoutX="440.0" layoutY="260.0" mnemonicParsing="false" style="-fx-text-fill: red;" text="Red1" userData="Red1">
+   <RadioButton id="selectionButton" layoutX="440.0" layoutY="260.0" mnemonicParsing="false" style="-fx-text-fill: red;" text="Red1" userData="Red1">
       <toggleGroup>
          <ToggleGroup fx:id="driveStation" />
       </toggleGroup>
    </RadioButton>
-   <RadioButton id="driveStation" layoutX="440.0" layoutY="315.0" mnemonicParsing="false" style="-fx-text-fill: red;" text="Red2" toggleGroup="$driveStation" userData="Red2" />
-   <RadioButton id="driveStation" layoutX="440.0" layoutY="370.0" mnemonicParsing="false" style="-fx-text-fill: red;" text="Red3" toggleGroup="$driveStation" userData="Red3" />
-   <RadioButton id="driveStation" layoutX="615.0" layoutY="260.0" mnemonicParsing="false" style="-fx-text-fill: blue;" text="Blue1" toggleGroup="$driveStation" userData="Blue1" />
-   <RadioButton id="driveStation" layoutX="615.0" layoutY="313.0" mnemonicParsing="false" style="-fx-text-fill: blue;" text="Blue2" toggleGroup="$driveStation" userData="Blue2" />
-   <RadioButton id="driveStation" layoutX="615.0" layoutY="370.0" mnemonicParsing="false" style="-fx-text-fill: blue;" text="Blue3" toggleGroup="$driveStation" userData="Blue3" />
+   <RadioButton id="selectionButton" layoutX="440.0" layoutY="315.0" mnemonicParsing="false" style="-fx-text-fill: red;" text="Red2" toggleGroup="$driveStation" userData="Red2" />
+   <RadioButton id="selectionButton" layoutX="440.0" layoutY="370.0" mnemonicParsing="false" style="-fx-text-fill: red;" text="Red3" toggleGroup="$driveStation" userData="Red3" />
+   <RadioButton id="selectionButton" layoutX="615.0" layoutY="260.0" mnemonicParsing="false" style="-fx-text-fill: blue;" text="Blue1" toggleGroup="$driveStation" userData="Blue1" />
+   <RadioButton id="selectionButton" layoutX="615.0" layoutY="313.0" mnemonicParsing="false" style="-fx-text-fill: blue;" text="Blue2" toggleGroup="$driveStation" userData="Blue2" />
+   <RadioButton id="selectionButton" layoutX="615.0" layoutY="370.0" mnemonicParsing="false" style="-fx-text-fill: blue;" text="Blue3" toggleGroup="$driveStation" userData="Blue3" />
+   <Label layoutX="68.0" layoutY="101.0" text="Team Num" />
+   <Label layoutX="56.0" layoutY="209.0" text="Match Num" />
 </Pane>

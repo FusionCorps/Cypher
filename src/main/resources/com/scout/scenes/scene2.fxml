@@ -62,47 +62,47 @@
          </RadialGradient>
       </fill>
    </Rectangle>
-   <CheckBox id="mobility" fx:id="mobility" layoutX="234.0" layoutY="108.0" mnemonicParsing="false" text="Mobility?" />
+   <CheckBox id="mobility" fx:id="mobility" layoutX="241.0" layoutY="89.0" mnemonicParsing="false" text="Mobility?" />
 
-   <Button id="nextPageButton" layoutX="1105.0" layoutY="750.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
+   <Button id="pageButton" layoutX="1105.0" layoutY="750.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
 
-    <Button id="prevPageButton" layoutX="40.0" layoutY="750.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
+    <Button id="pageButton" layoutX="40.0" layoutY="750.0" mnemonicParsing="false" onAction="#prevPage" prefHeight="60.0" prefWidth="175.0" text="Prev Page" />
 
    <Label id="auton" layoutX="520.0" layoutY="14.0" text="Auton" />
 
-   <Label id="chargeStation" layoutX="476.0" layoutY="144.0" text="Charging Station" />
+   <Label id="chargeStation" layoutX="468.0" layoutY="142.0" text="Charging Station" />
 
    <Label id="preload" layoutX="41.0" layoutY="111.0" text="Preload" />
 
-   <RadioButton id="chargeStationEngage" layoutX="418.0" layoutY="191.0" mnemonicParsing="false" text="Engage" userData="engage">
+   <RadioButton id="selectionButton" layoutX="418.0" layoutY="191.0" mnemonicParsing="false" text="Engage" userData="engage">
       <toggleGroup>
          <ToggleGroup fx:id="autoBalance" />
       </toggleGroup>
    </RadioButton>
-   <RadioButton id="chargeStationDock" layoutX="640.0" layoutY="190.0" mnemonicParsing="false" text="Dock" userData="dock">
+   <RadioButton id="selectionButton" layoutX="640.0" layoutY="190.0" mnemonicParsing="false" text="Dock" userData="dock">
        <toggleGroup>
             <fx:reference source="autoBalance" />
        </toggleGroup>
    </RadioButton>
-   <RadioButton id="chargeStationNA" layoutX="640.0" layoutY="256.0" mnemonicParsing="false" text="N/A" userData="N/A">
+   <RadioButton id="selectionButton" layoutX="640.0" layoutY="256.0" mnemonicParsing="false" text="N/A" userData="N/A">
        <toggleGroup>
             <fx:reference source="autoBalance" />
        </toggleGroup>
    </RadioButton>
-   <RadioButton id="chargeStationFail" layoutX="418.0" layoutY="255.0" mnemonicParsing="false" text="Fail" userData="fail">
+   <RadioButton id="selectionButton" layoutX="418.0" layoutY="255.0" mnemonicParsing="false" text="Fail" userData="fail">
       <toggleGroup>
             <fx:reference source="autoBalance" />
       </toggleGroup>
    </RadioButton>
 
-   <RadioButton id="preloadCone" layoutX="40.0" layoutY="160.0" mnemonicParsing="false" text="Cone" userData="cone">
+   <RadioButton id="selectionButton" layoutX="40.0" layoutY="160.0" mnemonicParsing="false" text="Cone" userData="cone">
       <toggleGroup>
          <ToggleGroup fx:id="preload" />
       </toggleGroup>
    </RadioButton>
-   <RadioButton id="preloadCube" layoutX="40.0" layoutY="215.0" mnemonicParsing="false" text="Cube" toggleGroup="$preload" userData="cube">
+   <RadioButton id="selectionButton" layoutX="40.0" layoutY="215.0" mnemonicParsing="false" text="Cube" toggleGroup="$preload" userData="cube">
    </RadioButton>
-   <RadioButton id="preloadNA" layoutX="40.0" layoutY="270.0" mnemonicParsing="false" text="N/A" toggleGroup="$preload" userData="N/A">
+   <RadioButton id="selectionButton" layoutX="40.0" layoutY="270.0" mnemonicParsing="false" text="N/A" toggleGroup="$preload" userData="N/A">
    </RadioButton>
 
     <GridPane fx:id="a_grid" layoutX="160.0" layoutY="402.0" prefHeight="333.0" prefWidth="999.0">
@@ -169,21 +169,24 @@
         <Button mnemonicParsing="false" onAction="#manipGPStart" prefHeight="53.0" prefWidth="100.0" style="-fx-background-color: white; -fx-border-color: black;" userData="4" GridPane.rowIndex="3" />
     </GridPane>
    <Label id="pickupText" layoutX="841.0" layoutY="-13.0" prefHeight="106.0" prefWidth="341.0" text="Pickups IN Neutral Zone" textAlignment="CENTER" wrapText="true" />
-   <Button id="changePicture" layoutX="1176.0" layoutY="158.0" mnemonicParsing="false" onAction="#changeGPAutonPNG" prefHeight="86.0" prefWidth="122.0" text="Change Picture" textAlignment="CENTER" wrapText="true" />
-   <Label layoutX="16.0" layoutY="433.0" prefHeight="59.0" prefWidth="146.0" style="-fx-font-weight: bold;" text="TOP NODES" textAlignment="CENTER" wrapText="true">
+   <Button id="changePicture" layoutX="1176.0" layoutY="158.0" mnemonicParsing="false" onAction="#changeGPAutonPNG" prefHeight="86.0" prefWidth="122.0" text="Change Picture" textAlignment="CENTER" wrapText="true">
+      <font>
+         <Font size="20.0" />
+      </font></Button>
+   <Label id="tinyLabels" layoutX="39.0" layoutY="445.0" prefHeight="21.0" prefWidth="122.0" style="-fx-font-weight: bold;" text="TOP NODES" textAlignment="CENTER" wrapText="true">
       <font>
          <Font size="24.0" />
       </font>
    </Label>
-   <Label layoutX="16.0" layoutY="551.0" style="-fx-font-weight: bold;" text="MID NODES">
+   <Label id="tinyLabels" layoutX="49.0" layoutY="558.0" style="-fx-font-weight: bold;" text="MID NODES">
       <font>
          <Font size="24.0" />
       </font>
    </Label>
-   <Label layoutX="52.0" layoutY="632.0" prefHeight="86.0" prefWidth="95.0" style="-fx-font-weight: bold;" text="HYBRID NODES" textAlignment="CENTER" wrapText="true">
+   <Label id="tinyLabels" layoutX="52.0" layoutY="632.0" prefHeight="86.0" prefWidth="95.0" style="-fx-font-weight: bold;" text="HYBRID NODES" textAlignment="CENTER" wrapText="true">
       <font>
          <Font size="24.0" />
       </font>
    </Label>
-   <Label layoutX="604.0" layoutY="380.0" text="↑ Driver Stations" />
+   <Label id="tinyLabels" layoutX="604.0" layoutY="380.0" text="↑ Driver Stations" />
 </Pane>

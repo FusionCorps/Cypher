@@ -4,31 +4,20 @@
 }
 
 *{ -fx-font-family: "Mandatory Plaything";}
-#prevPageButton {
-    -fx-font-size: 27px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
 
-#nextPageButton {
-    -fx-font-size: 27px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#balanceTime {
+.label {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-alignment: center;
-    -fx-stroke-type: outside;
+}
+
+#pageButton {
+    -fx-font-size: 27px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-alignment: center;
 }
 
 #endgame {
@@ -38,22 +27,9 @@
     -fx-wrap-text: true;
 }
 
-#chargeStation {
+#selectionButton {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#time {
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: left;
-}
-
-#shuttle {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
     -fx-wrap-text: true;
 }
 
@@ -62,64 +38,4 @@
     -fx-font-weight: bold;
     -fx-text-alignment: center;
     -fx-wrap-text: true;
-}
-
-#startTimerButton {
-    -fx-font-size: 27px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#stopTimerButton {
-    -fx-font-size: 27px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#resetTimerButton {
-    -fx-font-size: 27px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#chargeStationEngage {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#chargeStationDock {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#chargeStationFail {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#chargeStationNA {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#chargeStationPark {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
 }

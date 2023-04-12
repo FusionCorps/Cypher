@@ -7,17 +7,12 @@
 -fx-font-family: "Mandatory Plaything";
 }
 
-#prevPageButton {
-    -fx-font-size: 27px;
+.label {
+    -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
 }
 
-#nextPageButton {
+#pageButton {
     -fx-font-size: 27px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -32,91 +27,9 @@
     -fx-font-weight: bold;
 }
 
-#pickups {
-    -fx-font-size: 70px;
+#tinyLabels {
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
-#communityPickups {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
 
-#neutralPickups {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
-
-#singlePickups {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
-
-#doublePickups {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
-
-#communityMinusButton {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#communityPlusButton {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#communityPickupsText {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#neutralPickupsText {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#singlePickupsText {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-#doublePickupsText {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#superChargeScored {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}

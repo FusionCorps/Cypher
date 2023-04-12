@@ -6,17 +6,12 @@
 * {
     -fx-font-family: "Mandatory Plaything";
 }
-#matchNumText {
+.label {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
 }
 
-#matchNumTextField {
+#textField {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -26,27 +21,7 @@
     -fx-alignment: center;
 }
 
-#teamNumText {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#teamNumTextField {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#prevPageButton {
+#pageButton {
     -fx-font-size: 27px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -54,26 +29,6 @@
     -fx-background-radius: 5px;
     -fx-padding: 5px;
     -fx-alignment: center;
-}
-
-#nextPageButton {
-    -fx-font-size: 27px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
-}
-
-#alliance {
-    -fx-font-size: 30px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center
 }
 
 #pregame {
@@ -81,47 +36,10 @@
     -fx-font-weight: bold;
 }
 
-#allianceR {
-    -fx-font-size: 32px;
-    -fx-text-fill: red;
-    -fx-font-weight: bold;
-}
-
-#allianceB {
-    -fx-font-size: 32px;
-    -fx-text-fill: blue;
-    -fx-font-weight: bold;
-}
-
-#startLocation1 {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
-
-#startLocation2 {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
-
-#startLocation3 {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
-
-#startLocation {
+#selectionButton {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
     -fx-wrap-text: true;
-}
-
-#flipImageButton {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
 }
 
 #teamNameText {
@@ -134,8 +52,4 @@
     -fx-font-family: Bahnschrift;
 }
 
-#driveStation {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-}
 

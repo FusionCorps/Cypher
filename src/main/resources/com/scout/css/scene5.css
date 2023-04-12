@@ -5,17 +5,12 @@
 * {
     -fx-font-family: "Mandatory Plaything"; }
 
-#prevPageButton {
-    -fx-font-size: 27px;
+.label {
+    -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-    -fx-alignment: center;
 }
 
-#nextPageButton {
+#pageButton {
     -fx-font-size: 27px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
@@ -41,48 +36,6 @@
     -fx-font-family: Bahnschrift;
 }
 
-#everybot {
-    -fx-font-size:32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#drivetrain {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#driverSkill {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#intake {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#driveSpeed {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#drivetrain {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#scoutNameText {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
 #scoutNameTextField {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
@@ -94,15 +47,4 @@
     -fx-font-family: Bahnschrift;
 }
 
-#drivetrainSwerve {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
-
-#drivetrainTank {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-alignment: center;
-}
 

@@ -44,7 +44,7 @@ public class PlusMinusBox extends HBox {
         this.getChildren().addAll(minus, value, plus);
         plus.setOnAction(e -> value.setText(String.valueOf(Integer.parseInt(value.getText()) + 1)));
         minus.setOnAction(e -> {
-            if (value.getText().equals("0")) value.setText(String.valueOf(Integer.parseInt(value.getText()) - 1));
+            if (!value.getText().equals("0")) value.setText(String.valueOf(Integer.parseInt(value.getText()) - 1));
         });
     }
 

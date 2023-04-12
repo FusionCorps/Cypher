@@ -89,13 +89,13 @@ public class FXMLController {
     @FXML private PlusMinusBox neutralPickups; //neutral zone GP intaked
     @FXML private PlusMinusBox singlePickups; //singlesub GP intaked
     @FXML private PlusMinusBox doublePickups; //doublesub GP intaked
-    @FXML private PlusMinusBox superChargeScored; //supercharged pieces scored
+    @FXML private PlusMinusBox superChargeScored; //supercharged pieces scored by a team
+    @FXML private PlusMinusBox ferryPieces; //number of ferried pieces by a team
     private static final ArrayList<Integer> teleopCones = new ArrayList<>(); //cones intaked
     private static final ArrayList<Integer> teleopCubes = new ArrayList<>(); //cubes intaked
 
     @FXML private GridPane t_grid; //GP grid
     //page 4 - endgame
-    @FXML private CheckBox shuttle; //shuttlebot
     @FXML private ToggleGroup teleopBalance; //endgame balance status
     @FXML private CheckBox buddyClimb; //buddy climb
     //page5 - qualitative notes
@@ -212,7 +212,7 @@ public class FXMLController {
         //if next line causes errors, check syntax in all fxml files
         Parent root = FXMLLoader.load(FXMLController.class.getResource("scenes/scene" + (sceneIndex) + ".fxml"));
         Scene scene = new Scene(root);
-        stage.setTitle("6672 Scouting App Page " + (sceneIndex));
+        stage.setTitle("6672 Cypher Page " + (sceneIndex));
         stage.setScene(scene);
 
         //adjusts viewing screen to full screen, will look best on the particular surface pro display used because AnchorPane layout is used
@@ -301,11 +301,11 @@ public class FXMLController {
                 collectDataTextField(singlePickups.getValueElement(), "singlePickups");
                 collectDataTextField(doublePickups.getValueElement(), "doublePickups");
                 collectDataTextField(superChargeScored.getValueElement(), "superChargeScored");
+                collectDataTextField(ferryPieces.getValueElement(), "ferryPieces");
                 collectDataArray(teleopCones, "teleopCones");
                 collectDataArray(teleopCubes, "teleopCubes");
             }
             case 4 -> {
-                collectDataCheckBox(shuttle, "shuttle");
                 collectDataToggleGroup(teleopBalance, "teleopBalance");
                 collectDataCheckBox(buddyClimb, "buddyClimb");
             }
@@ -339,10 +339,10 @@ public class FXMLController {
                 reloadDataTextField(singlePickups.getValueElement(), "singlePickups");
                 reloadDataTextField(doublePickups.getValueElement(), "doublePickups");
                 reloadDataTextField(superChargeScored.getValueElement(), "superChargeScored");
+                reloadDataTextField(ferryPieces.getValueElement(), "ferryPieces");
                 reloadDataGridFieldGP(t_grid, teleopCones, teleopCubes);
             }
             case 4 -> {
-                reloadDataCheckBox(shuttle, "shuttle");
                 reloadDataToggleGroup(teleopBalance, "teleopBalance");
                 reloadDataCheckBox(buddyClimb, "buddyClimb");
             }
