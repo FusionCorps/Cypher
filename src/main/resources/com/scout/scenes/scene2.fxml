@@ -62,7 +62,7 @@
          </RadialGradient>
       </fill>
    </Rectangle>
-   <CheckBox id="mobility" fx:id="mobility" layoutX="241.0" layoutY="89.0" mnemonicParsing="false" text="Mobility?" />
+   <CheckBox id="mobility" fx:id="mobility" layoutX="41.0" layoutY="190.0" mnemonicParsing="false" text="Mobility?" />
 
    <Button id="pageButton" layoutX="1105.0" layoutY="750.0" mnemonicParsing="false" onAction="#nextPage" prefHeight="60.0" prefWidth="175.0" text="Next Page" />
 
@@ -70,9 +70,7 @@
 
    <Label id="auton" layoutX="520.0" layoutY="14.0" text="Auton" />
 
-   <Label id="chargeStation" layoutX="468.0" layoutY="142.0" text="Charging Station" />
-
-   <Label id="preload" layoutX="41.0" layoutY="111.0" text="Preload" />
+   <Label id="chargeStation" layoutX="442.0" layoutY="140.0" text="Charging Station" />
 
    <RadioButton id="selectionButton" layoutX="418.0" layoutY="191.0" mnemonicParsing="false" text="Engage" userData="engage">
       <toggleGroup>
@@ -84,7 +82,7 @@
             <fx:reference source="autoBalance" />
        </toggleGroup>
    </RadioButton>
-   <RadioButton id="selectionButton" layoutX="640.0" layoutY="256.0" mnemonicParsing="false" text="N/A" userData="N/A">
+   <RadioButton id="selectionButton" layoutX="640.0" layoutY="256.0" mnemonicParsing="false" selected="true" text="N/A" userData="N/A">
        <toggleGroup>
             <fx:reference source="autoBalance" />
        </toggleGroup>
@@ -93,16 +91,6 @@
       <toggleGroup>
             <fx:reference source="autoBalance" />
       </toggleGroup>
-   </RadioButton>
-
-   <RadioButton id="selectionButton" layoutX="40.0" layoutY="160.0" mnemonicParsing="false" text="Cone" userData="cone">
-      <toggleGroup>
-         <ToggleGroup fx:id="preload" />
-      </toggleGroup>
-   </RadioButton>
-   <RadioButton id="selectionButton" layoutX="40.0" layoutY="215.0" mnemonicParsing="false" text="Cube" toggleGroup="$preload" userData="cube">
-   </RadioButton>
-   <RadioButton id="selectionButton" layoutX="40.0" layoutY="270.0" mnemonicParsing="false" text="N/A" toggleGroup="$preload" userData="N/A">
    </RadioButton>
 
     <GridPane fx:id="a_grid" layoutX="160.0" layoutY="402.0" prefHeight="333.0" prefWidth="999.0">
@@ -169,7 +157,7 @@
         <Button mnemonicParsing="false" onAction="#manipGPStart" prefHeight="53.0" prefWidth="100.0" style="-fx-background-color: white; -fx-border-color: black;" userData="4" GridPane.rowIndex="3" />
     </GridPane>
    <Label id="pickupText" layoutX="841.0" layoutY="-13.0" prefHeight="106.0" prefWidth="341.0" text="Pickups IN Neutral Zone" textAlignment="CENTER" wrapText="true" />
-   <Button id="changePicture" layoutX="1176.0" layoutY="158.0" mnemonicParsing="false" onAction="#changeGPAutonPNG" prefHeight="86.0" prefWidth="122.0" text="Change Picture" textAlignment="CENTER" wrapText="true">
+   <Button id="pageButton" layoutX="1170.0" layoutY="192.0" mnemonicParsing="false" onAction="#changeGPAutonPNG" prefHeight="86.0" prefWidth="140.0" text="Change Picture" textAlignment="CENTER" wrapText="true">
       <font>
          <Font size="20.0" />
       </font></Button>

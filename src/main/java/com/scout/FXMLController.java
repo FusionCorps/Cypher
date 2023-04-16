@@ -68,11 +68,11 @@ public class FXMLController {
     @FXML private LimitedTextField matchNum; //match number
     @FXML private ToggleGroup driveStation;
     @FXML private ToggleGroup startLocation; //starting location
+    @FXML private ToggleGroup preload; // GP type preload
 
     @FXML private ImageView startLocationPNG; //starting location image
     @FXML private Text teamNameText;
     //page 2 - auton
-    @FXML private ToggleGroup preload; // GP type preload
     @FXML private CheckBox mobility; //mobility
     private static final ArrayList<Integer> autoPickups = new ArrayList<>(); //GP intaked during auton
     private static final ArrayList<Integer> autoFailedPickups = new ArrayList<>(); //GP failed to intake during auton
@@ -188,14 +188,11 @@ public class FXMLController {
         nextPage(event);
     }
     @FXML private void nextPage(ActionEvent event) throws IOException {
-        //checks if all required fields are filled, then changes page
-        if (checkRequiredFields()) {
             collectData();
             sceneIndex++;
             isNextPageClicked = true;
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             setPage(stage, sceneIndex);
-        }
     }
     @FXML private void prevPage(ActionEvent event) throws IOException {
         //collects data from current page and goes to previous page
@@ -233,42 +230,45 @@ public class FXMLController {
 
     //sends data to QR code creator and displays it on screen
     @FXML private void sendInfo() throws Exception {
-        data = new StringBuilder();
+        if(checkRequiredFields()) {
+            data = new StringBuilder();
 
-        //run certain checks to correctly format data; boolean checks, and remove pieces scored in auton from being recorded in teleop
-        for (String keyName : info.keySet()) {
-            if (info.get(keyName).equals("true")) info.put(keyName, "TRUE");
-            else if (info.get(keyName).equals("false")) info.put(keyName, "FALSE");
-            else if (info.get(keyName).equals("N/A") || info.get(keyName).equals("N/A or Failed")) info.put(keyName, "NA");
+            //run certain checks to correctly format data; boolean checks, and remove pieces scored in auton from being recorded in teleop
+            for (String keyName : info.keySet()) {
+                if (info.get(keyName).equals("true")) info.put(keyName, "TRUE");
+                else if (info.get(keyName).equals("false")) info.put(keyName, "FALSE");
+                else if (info.get(keyName).equals("N/A") || info.get(keyName).equals("N/A or Failed"))
+                    info.put(keyName, "NA");
+            }
+
+            for (int i = 0; i < teleopCones.size(); i++)
+                if (autoCones.contains(teleopCones.get(i)))
+                    teleopCones.remove(i);
+            collectDataArray(teleopCones, "teleopCones");
+
+            for (int i = 0; i < teleopCubes.size(); i++)
+                if (autoCubes.contains(teleopCubes.get(i)))
+                    teleopCubes.remove(i);
+            collectDataArray(teleopCubes, "teleopCubes");
+
+            //output string appended to data StringBuilder
+            for (String keyName : info.keySet()) {
+                //get embedded alliance value from driveStation
+                if (keyName.equals("driveStation"))
+                    data.append("alliance" + "=" + info.get("driveStation").substring(0, 1) + "|");
+                data.append(keyName + "=" + info.get(keyName) + "|");
+            }
+
+            data = data.delete(data.lastIndexOf("|"), data.length());
+
+            //creates QR code and displays it on screen, runs outputAll() to save all data
+            bufferedImage = QRFuncs.generateQRCode(data.toString(), "qrcode.png");
+            File file = new File("qrcode.png");
+            Image img = new Image(file.getAbsolutePath());
+            f_imageBox.setImage(img);
+            f_dataStr.setText(data.toString());
+            outputAll();
         }
-
-        for (int i = 0; i < teleopCones.size(); i++)
-            if (autoCones.contains(teleopCones.get(i)))
-                teleopCones.remove(i);
-        collectDataArray(teleopCones, "teleopCones");
-
-        for (int i = 0; i < teleopCubes.size(); i++)
-            if (autoCubes.contains(teleopCubes.get(i)))
-                teleopCubes.remove(i);
-        collectDataArray(teleopCubes, "teleopCubes");
-
-        //output string appended to data StringBuilder
-        for (String keyName : info.keySet()) {
-            //get embedded alliance value from driveStation
-            if (keyName.equals("driveStation"))
-                data.append("alliance" + "=" + info.get("driveStation").substring(0,1) + "|");
-            data.append(keyName + "=" + info.get(keyName) + "|");
-        }
-
-        data = data.delete(data.lastIndexOf("|"), data.length());
-
-        //creates QR code and displays it on screen, runs outputAll() to save all data
-        bufferedImage = QRFuncs.generateQRCode(data.toString(), "qrcode.png");
-        File file = new File("qrcode.png");
-        Image img = new Image(file.getAbsolutePath());
-        f_imageBox.setImage(img);
-        f_dataStr.setText(data.toString());
-        outputAll();
     }
 
     //IMPORTANT: ALL collected data elements must be added to the info HashMap in this method, with a SPECIFIC ORDER so that Kraken can correctly parse them
@@ -279,9 +279,9 @@ public class FXMLController {
                 collectDataTextField(matchNum, "matchNum");
                 collectDataToggleGroup(driveStation, "driveStation");
                 collectDataToggleGroup(startLocation, "startLocation");
+                collectDataToggleGroup(preload, "preload");
             }
             case 2 -> {
-                collectDataToggleGroup(preload, "preload");
                 collectDataCheckBox(mobility, "mobility");
                 collectDataArray(autoPickups, "autoPickups");
                 collectDataArray(autoFailedPickups, "autoFailedPickups");
@@ -325,10 +325,10 @@ public class FXMLController {
                 reloadDataTextField(matchNum, "matchNum");
                 reloadDataToggleGroup(driveStation, "driveStation");
                 reloadDataToggleGroup(startLocation, "startLocation");
+                reloadDataToggleGroup(preload, "preload");
             }
             case 2 -> {
                 reloadDataCheckBox(mobility, "mobility");
-                reloadDataToggleGroup(preload, "preload");
                 reloadDataToggleGroup(autoBalance, "autoBalance");
                 reloadDataGridFieldGP(a_grid, autoCones, autoCubes);
                 reloadDataGridFieldPickup(a_preGrid);
@@ -396,60 +396,32 @@ public class FXMLController {
 
     //validation for required fields
     private boolean checkRequiredFields() {
-        switch (sceneIndex) {
-            case 1 -> {
-                //if teamNum is empty or contains only 0s, or matchNum is empty or contains only 0s, or driveStation or startLocation is not selected, display error message
-                if (teamNum.getText().isEmpty() || teamNum.getText().matches("0+") ||
-                    matchNum.getText().isEmpty() || matchNum.getText().matches("0+") ||
-                    driveStation.getSelectedToggle() == null || startLocation.getSelectedToggle() == null) {
-                    AlertBox.display("", "Before proceeding, please fill out all required fields.\n" +
-                            "Note that the team number and match number cannot contain 0s.");
-                    return false;
+        String warnings = "";
+        if (info.get("teamNum").isBlank() || info.get("teamNum").matches("0+"))
+            warnings += "Fix the team number (cannot contain only 0s or be blank). ";
+        if (info.get("matchNum").isBlank() || info.get("matchNum").matches("0+"))
+            warnings += "Fix the match number (cannot contain only 0s or be blank). ";
+        if (Integer.parseInt(info.get("communityPickups")) > 99)
+            warnings += "Community Pickups cannot be greater than 99. ";
+        if (Integer.parseInt(info.get("neutralPickups")) > 99)
+            warnings += "Neutral Zone Pickups cannot be greater than 99. ";
+        if (Integer.parseInt(info.get("singlePickups")) > 99)
+            warnings += "Single Pickups cannot be greater than 99. ";
+        if (Integer.parseInt(info.get("doublePickups")) > 99)
+            warnings += "Double Pickups cannot be greater than 99. ";
+        if (Integer.parseInt(info.get("superChargeScored")) > 99)
+            warnings += "Super Charge Scored cannot be greater than 99. ";
+        if (Integer.parseInt(info.get("ferryPieces")) > 99)
+            warnings += "Ferried Pieces cannot be greater than 99. ";
+        if (info.get("scoutName").isBlank())
+            warnings += "Fix the scouter name (cannot be blank). ";
 
-                }
-            }
-            case 2 -> {
-                if (preload.getSelectedToggle() == null || autoBalance.getSelectedToggle() == null) {
-                    AlertBox.display("", "Before proceeding, please select one of the GP preloads and balance status buttons.");
-                    return false;
-                }
-            }
-            case 3 -> {
-                if (Integer.parseInt(communityPickups.getValueElement().getText()) > 99) {
-                    AlertBox.display("", "Community Pickups cannot be greater than 99.");
-                    return false;
-                }
-                if (Integer.parseInt(neutralPickups.getValueElement().getText()) > 99) {
-                    AlertBox.display("", "Neutral Zone Pickups cannot be greater than 99.");
-                    return false;
-                }
-                if (Integer.parseInt(singlePickups.getValueElement().getText()) > 99) {
-                    AlertBox.display("", "Single Pickups cannot be greater than 99.");
-                    return false;
-                }
-                if (Integer.parseInt(doublePickups.getValueElement().getText()) > 99) {
-                    AlertBox.display("", "Double Pickups cannot be greater than 99.");
-                }
-                if (Integer.parseInt(superChargeScored.getValueElement().getText()) > 99) {
-                    AlertBox.display("", "Super Charge Scored cannot be greater than 99.");
-                    return false;
-                }
-
-            }
-            case 4 -> {
-                if (teleopBalance.getSelectedToggle() == null) {
-                    AlertBox.display("", "Before proceeding, please select a balance status button.");
-                    return false;
-                }
-            }
-            case 5 -> {
-                if (scoutName.getText().isBlank()) {
-                    AlertBox.display("", "Before proceeding, please fill out your name. PLEASE INCLUDE COMMENTS!!!");
-                    return false;
-                }
-            }
+        System.out.println(warnings);
+        if (warnings.isBlank()) return true;
+        else {
+            AlertBox.display("Incorrect inputs", warnings);
+            return false;
         }
-        return true;
     }
 
     /**
@@ -459,7 +431,7 @@ public class FXMLController {
      */
 
     //saves output to QR Codes and text files on computer, copies in Desktop/Scouting and Documents/backupScouting of active user
-    @FXML private void outputAll() {
+    private void outputAll() {
         //output paths
         String outputPath = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Scouting";
         String backupPath = "C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\backupScouting";
