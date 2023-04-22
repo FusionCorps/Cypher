@@ -172,7 +172,7 @@ public class FXMLController {
     //implementations of setPage() for going to next and previous pages
     @FXML private void resetAll(ActionEvent event) throws IOException {
         //sets new default match number
-        prevMatchNum = String.valueOf(Integer.parseInt(prevMatchNum) + Integer.parseInt(info.get("matchNum")));
+        prevMatchNum = String.valueOf(Integer.parseInt(info.get("matchNum")) + 1);
         //resets all data storing elements
         data = new StringBuilder();
         info = new LinkedHashMap<>();
