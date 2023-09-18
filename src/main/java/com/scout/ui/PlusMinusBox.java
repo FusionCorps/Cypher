@@ -2,7 +2,7 @@ package com.scout.ui;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-
+// an HBox element containing +/- counters for user input
 public class PlusMinusBox extends HBox {
     LimitedTextField value = new LimitedTextField();
     Button minus = new Button("-");

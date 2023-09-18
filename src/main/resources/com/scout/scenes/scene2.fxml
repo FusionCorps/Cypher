@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #a6bddb;" stylesheets="@../css/scene2.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #a6bddb;" stylesheets="@../css/scene2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
    <Rectangle arcHeight="5.0" arcWidth="5.0" height="333.0" layoutX="490.0" layoutY="402.0" stroke="BLACK" strokeType="INSIDE" width="335.0">
       <fill>
          <RadialGradient centerX="0.5" centerY="0.5" radius="1.0">

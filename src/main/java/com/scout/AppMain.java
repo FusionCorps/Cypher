@@ -3,15 +3,15 @@ package com.scout;
 /**
  Cypher
  6672 FusionCorps Scouting App
-  Built with JavaFX framework, JDK 19, and IntelliJ IDEA
+  Built with JavaFX framework, JDK 17, and IntelliJ IDEA
   @author FusionCorps-Rishabh Rengarajan
-  @version 1.12
+  @version FINAL
 
   each page is a separate scene, whose layout is defined in a separate FXML file
 
   UI Utility classes (in package com.scout.ui):
  * AlertBox.java - pop-up box for error messages
- * TimerText.java - timer for balance timing (unused currently)
+ * PlusMinusBox.java - +/- counters for user input
  * LimitedTextField.java - restrictive text fields for user input
 
  Other Utility classes (in package com.scout.util):

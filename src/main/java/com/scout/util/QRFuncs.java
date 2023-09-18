@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
+//for generating QR codes at end of scouting a match
 public class QRFuncs {
     public static BufferedImage generateQRCode(String text, String path) throws Exception {
         QRCodeWriter writer = new QRCodeWriter();

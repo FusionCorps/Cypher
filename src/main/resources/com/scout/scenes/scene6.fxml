@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #034e7b;" stylesheets="@../css/scene6.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="1324.0" style="-fx-background-color: #034e7b;" stylesheets="@../css/scene6.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scout.FXMLController">
 
    <Button id="sendInfoButton" layoutX="363.0" layoutY="14.0" onAction="#sendInfo" prefHeight="168.0" prefWidth="697.0" text="Generate QR" />
 
